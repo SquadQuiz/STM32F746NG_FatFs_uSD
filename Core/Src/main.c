@@ -46,6 +46,8 @@
 
 /* USER CODE BEGIN PV */
 
+uint8_t workBuffer[_MAX_SS];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,11 +70,24 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  FRESULT res = FR_NOT_READY;                           /* FatFs function common result code */
+  uint32_t bytesToWritten = 0;                          /* File write counts */
+  uint32_t bytesToRead = 0;                             /* File read counts */
+  uint8_t wtext[] = "STM32F746G FatFs + uSD ";          /* File write buffer */
+  uint8_t rtext[100];                                   /* File read buffer */
 
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
   MPU_Config();
+
+  /* Enable the CPU Cache */
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -87,6 +102,13 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+
+    /* STM32F7xx HAL library initialization:
+      - Configure the Flash ART accelerator on ITCM interface
+      - Configure the Systick to generate an interrupt each 1 msec
+      - Set NVIC Group Priority to 4
+      - Global MSP (MCU Support Package) initialization 
+    */
 
   /* USER CODE END SysInit */
 
@@ -105,9 +127,88 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_Delay(1000);
-    Error_Handler(); // assume error occuring!
-  }
+    
+    // if (FATFS_LinkDriver(&SD_Driver, SDPath) == 0)
+    // {
+
+      /*##-2- Register the file system object to the FatFs module ##############*/
+      if (f_mount(&SDFatFS, (TCHAR const*)SDPath, 0) != FR_OK)
+      {
+        /* FatFs Initialization Error */
+        Error_Handler();
+      }
+      else
+      {
+        /*##-3- Create a FAT file system (format) on the logical drive #########*/
+        /* WARNING: Formatting the uSD card will delete all content on the device */
+        // if (f_mkfs((TCHAR const*)SDPath, FM_ANY, 0, workBuffer, sizeof(workBuffer)) != FR_OK)
+        // {
+        //   /* FatFs Format Error */
+        //   Error_Handler();
+        // }
+        // else
+        // {
+          /*##-4- Create and Open a new text file object with write access #####*/
+          if (f_open(&SDFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+          {
+            /* 'STM32.TXT' file Open for write Error */
+            Error_Handler();
+          }
+          else
+          {
+            /*##-5- Write data to the text file ################################*/
+            res = f_write(&SDFile, wtext, sizeof(wtext), (void*)&bytesToWritten);
+
+            if ((bytesToWritten == 0) || (res != FR_OK))
+            {
+              /* 'STM32.TXT' file Write or EOF Error */
+              Error_Handler();
+            }
+            else
+            {
+              /*##-6- Close the open text file #################################*/
+              f_close(&SDFile);
+
+              /*##-7- Open the text file object with read access ###############*/
+              if (f_open(&SDFile, "STM32.TXT", FA_READ) != FR_OK)
+              {
+                /* 'STM32.TXT' file Open for read Error */
+                Error_Handler();
+              }
+              else
+              {
+                /*##-8- Read data from the text file ###########################*/
+                res = f_read(&SDFile, rtext, sizeof(rtext), (UINT*)&bytesToRead);
+
+                if ((bytesToRead == 0) || (res != FR_OK))
+                {
+                  /* 'STM32.TXT' file Read or EOF Error */
+                  Error_Handler();
+                }
+                else
+                {
+                  /*##-9- Close the open text file #############################*/
+                  f_close(&SDFile);
+
+                  /*##-10- Compare read data with the expected data ############*/
+                  if ((bytesToRead != bytesToWritten))
+                  {
+                    /* Read data is different from the expected data */
+                    Error_Handler();
+                  }
+                  else
+                  {
+                    /* Success of the demo: no error occurrence */
+                    HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
+                  }
+                }
+              }
+            }
+          }
+        }
+      // }
+    }
+  // }
   /* USER CODE END 3 */
 }
 
