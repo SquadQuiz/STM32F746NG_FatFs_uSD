@@ -105,8 +105,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-    HAL_Delay(500);
+    HAL_Delay(1000);
+    Error_Handler(); // assume error occuring!
   }
   /* USER CODE END 3 */
 }
@@ -208,9 +208,11 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
+  HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
   while (1)
   {
+    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+    HAL_Delay(100);
   }
   /* USER CODE END Error_Handler_Debug */
 }
