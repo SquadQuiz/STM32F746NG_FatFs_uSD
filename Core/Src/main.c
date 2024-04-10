@@ -136,33 +136,33 @@ int main(void)
   if (f_mount(&SDFatFS, (TCHAR const*)SDPath, 0) != FR_OK)
   {
     /* FatFs Initialization Error */
-    printf("Failed to mount SD Card!!\n");
+    printf("FatFs: Failed to mount SD Card!!\n");
     Error_Handler();
   }
   else
   {
-    printf("Successfully mounted SD Card\n");
+    printf("FatFs: Successfully mounted SD Card\n");
     /*##-3- Create a FAT file system (format) on the logical drive #########*/
     /* WARNING: Formatting the uSD card will delete all content on the device */
     if (f_mkfs((TCHAR const*)SDPath, FM_ANY, 0, workBuffer, sizeof(workBuffer)) != FR_OK)
     {
       /* FatFs Format Error */
-      printf("Failed to format SD Card!!\n");
+      printf("FatFs: Failed to format SD Card!!\n");
       Error_Handler();
     }
     else
     {
       /*##-4- Create and Open a new text file object with write access #####*/
-      printf("Successfully to format SD Card!!\n");
+      printf("FatFs: Successfully to format SD Card!!\n");
       if (f_open(&SDFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
       {
         /* 'STM32.TXT' file Open for write Error */
-        printf("Failed to open file for writing!!\n");
+        printf("FatFs: Failed to open file for writing!!\n");
         Error_Handler();
       }
       else
       {
-        printf("Successfully to opened file!!\n");
+        printf("FatFs: Successfully to opened file!!\n");
 
         /*##-5- Write data to the text file ################################*/
         res = f_write(&SDFile, wtext, sizeof(wtext), (void*)&bytesToWritten);
@@ -170,12 +170,12 @@ int main(void)
         if ((bytesToWritten == 0) || (res != FR_OK))
         {
           /* 'STM32.TXT' file Write or EOF Error */
-          printf("Failed to write data to file!!\n");
+          printf("FatFs: Failed to write data to file!!\n");
           Error_Handler();
         }
         else
         {
-          printf("Data successfully written to file!!\n");
+          printf("FatFs: Data successfully written to file!!\n");
 
           /*##-6- Close the open text file #################################*/
           f_close(&SDFile);
@@ -184,7 +184,7 @@ int main(void)
           if (f_open(&SDFile, "STM32.TXT", FA_READ) != FR_OK)
           {
             /* 'STM32.TXT' file Open for read Error */
-            printf("Failed to open file for reading!!\n");
+            printf("FatFs: Failed to open file for reading!!\n");
             Error_Handler();
           }
           else
@@ -195,12 +195,12 @@ int main(void)
             if ((bytesToRead == 0) || (res != FR_OK))
             {
               /* 'STM32.TXT' file Read or EOF Error */
-              printf("Failed to read data from file!!\n");
+              printf("FatFs: Failed to read data from file!!\n");
               Error_Handler();
             }
             else
             {
-              printf("Data successfully read from file!!\n");
+              printf("FatFs: Data successfully read from file!!\n");
 
               /*##-9- Close the open text file #############################*/
               f_close(&SDFile);
@@ -209,14 +209,14 @@ int main(void)
               if ((bytesToRead != bytesToWritten))
               {
                 /* Read data is different from the expected data */
-                printf("Read data differs from the expected data!!\n");
+                printf("FatFs: Read data differs from the expected data!!\n");
                 Error_Handler();
               }
               else
               {
                 /* Success of the demo: no error occurrence */
                 HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
-                printf("Demo executed successfully!!\n");
+                printf("FatFs: Demo executed successfully!!\n");
               }
             }
           }
