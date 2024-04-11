@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "sdmmc.h"
 #include "usart.h"
@@ -123,6 +124,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SDMMC1_SD_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
@@ -142,8 +144,10 @@ int main(void)
   else
   {
     printf("FatFs: Successfully mounted SD Card\n");
+
     /*##-3- Create a FAT file system (format) on the logical drive #########*/
     /* WARNING: Formatting the uSD card will delete all content on the device */
+    printf("FatFs: Start formatting SD Card...\n");
     if (f_mkfs((TCHAR const*)SDPath, FM_ANY, 0, workBuffer, sizeof(workBuffer)) != FR_OK)
     {
       /* FatFs Format Error */
