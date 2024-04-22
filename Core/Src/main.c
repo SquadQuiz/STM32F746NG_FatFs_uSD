@@ -80,6 +80,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  
   FRESULT res = FR_NOT_READY;                  /* FatFs function common result code */
   uint32_t bytesToWritten = 0;                 /* File write counts */
   uint32_t bytesToRead = 0;                    /* File read counts */
