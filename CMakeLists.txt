@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
 
+# Set project version
+set(PROJ_VER_MAJOR 1)
+set(PROJ_VER_MINOR 0)
+set(PROJ_VER_PATCH 0)
+
 #
 # This file is generated only once,
 # and is not re-generated if converter is called multiple times.
@@ -31,7 +36,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 enable_language(C ASM)
 
 # Core project settings
-project(${CMAKE_PROJECT_NAME})
+project(${CMAKE_PROJECT_NAME} VERSION ${PROJ_VER_MAJOR}.${PROJ_VER_MINOR}.${PROJ_VER_PATCH})
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
 # Create an executable object type
@@ -67,6 +72,9 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     # Add user defined libraries
 )
 
+# Rename .elf file
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}")
+
 # Execute post-build to print size
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${CMAKE_PROJECT_NAME}>
@@ -74,10 +82,10 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
 
 # Convert output to hex and binary
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.hex
+    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}.hex
 )
 
 # Convert to bin file -> add conditional check?
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.bin
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}.bin
 )
