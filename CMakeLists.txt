@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 # Set project version
 set(PROJ_VER_MAJOR 1)
 set(PROJ_VER_MINOR 0)
-set(PROJ_VER_PATCH 1)
+set(PROJ_VER_PATCH 2)
 
 # Get current date
 string(TIMESTAMP CURRENT_DATE "%y%m%d")

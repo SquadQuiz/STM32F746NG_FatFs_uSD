@@ -81,11 +81,12 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   
-  FRESULT res = FR_NOT_READY;                  /* FatFs function common result code */
-  uint32_t bytesToWritten = 0;                 /* File write counts */
-  uint32_t bytesToRead = 0;                    /* File read counts */
-  uint8_t wtext[] = "STM32F746G FatFs + uSD "; /* File write buffer */
-  uint8_t rtext[100];                          /* File read buffer */
+  FRESULT res = FR_NOT_READY;                       /* FatFs function common result code */
+  uint32_t bytesToWritten = 0;                      /* File write counts */
+  uint32_t bytesToRead = 0;                         /* File read counts */
+  uint8_t filePath[] = "STM32.TXT";                 /* File path buffer */
+  uint8_t writeText[] = "STM32F746G FatFs + uSD";  /* File write buffer */
+  uint8_t readText[100];                            /* File read buffer */
 
   /* USER CODE END 1 */
 
@@ -157,7 +158,7 @@ int main(void)
       {
         /*##-4- Create and Open a new text file object with write access #####*/
         printf("FatFs: Successfully to format SD Card!!\n");
-        if (f_open(&SDFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+        if (f_open(&SDFile, (const TCHAR*)filePath, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
         {
           /* 'STM32.TXT' file Open for write Error */
           printf("FatFs: Failed to open file for writing!!\n");
@@ -168,7 +169,8 @@ int main(void)
           printf("FatFs: Successfully to opened file!!\n");
 
           /*##-5- Write data to the text file ################################*/
-          res = f_write(&SDFile, wtext, sizeof(wtext), (void*)&bytesToWritten);
+          res = f_write(&SDFile, writeText, sizeof(writeText), (void*)&bytesToWritten);
+          printf("FatFs: Write '%s' -> %s\n", writeText, filePath);
 
           if ((bytesToWritten == 0) || (res != FR_OK))
           {
@@ -184,7 +186,7 @@ int main(void)
             f_close(&SDFile);
 
             /*##-7- Open the text file object with read access ###############*/
-            if (f_open(&SDFile, "STM32.TXT", FA_READ) != FR_OK)
+            if (f_open(&SDFile, (const TCHAR*)filePath, FA_READ) != FR_OK)
             {
               /* 'STM32.TXT' file Open for read Error */
               printf("FatFs: Failed to open file for reading!!\n");
@@ -193,7 +195,7 @@ int main(void)
             else
             {
               /*##-8- Read data from the text file ###########################*/
-              res = f_read(&SDFile, rtext, sizeof(rtext), (UINT*)&bytesToRead);
+              res = f_read(&SDFile, readText, sizeof(readText), (UINT*)&bytesToRead);
 
               if ((bytesToRead == 0) || (res != FR_OK))
               {
@@ -205,6 +207,7 @@ int main(void)
               {
                 printf("FatFs: Data successfully read from file!!\n");
 
+                printf("FatFs: Read from file %s -> '%s'\n", filePath, readText);
                 /*##-9- Close the open text file #############################*/
                 f_close(&SDFile);
 
@@ -241,7 +244,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // REMARK: Main Super Loop
   }
   /* USER CODE END 3 */
 }
