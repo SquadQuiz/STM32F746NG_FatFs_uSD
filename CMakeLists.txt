@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 3.22)
 # Set project version
 set(PROJ_VER_MAJOR 1)
 set(PROJ_VER_MINOR 0)
-set(PROJ_VER_PATCH 0)
+set(PROJ_VER_PATCH 1)
+
+# Get current date
+string(TIMESTAMP CURRENT_DATE "%y%m%d")
 
 #
 # This file is generated only once,
@@ -73,7 +76,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 )
 
 # Rename .elf file
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}")
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}_v${PROJECT_VERSION}_${CURRENT_DATE}")
 
 # Execute post-build to print size
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
@@ -82,10 +85,9 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
 
 # Convert output to hex and binary
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}.hex
+    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}_v${PROJECT_VERSION}_${CURRENT_DATE}.hex
 )
 
-# Convert to bin file -> add conditional check?
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}_${PROJECT_VERSION}.bin
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}_v${PROJECT_VERSION}_${CURRENT_DATE}.bin
 )
