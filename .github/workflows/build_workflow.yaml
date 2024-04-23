@@ -1,7 +1,5 @@
-name: CMake Build STM32 Project (gcc-arm-none-eabi)
+name: CMake Config and Build STM32 Project
 
-# Because a PR results in a push; this workflow will run when a PR is merged
-# or when a commit is pushed directly to any branch.
 on:
   push:
     branches:
@@ -23,10 +21,13 @@ jobs:
       - name: Install GCC ARM toolchain
         run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi
 
-      - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Install Ninja Build Generator
+        run: sudo apt-get install -y ninja-build
 
-      - name: Build
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: CMake Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Test
