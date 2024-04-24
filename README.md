@@ -91,6 +91,13 @@
 ```c
 /***************** Re-direct printf() to USART1 *****************/
 
+/* USER CODE BEGIN Includes */
+
+#include <stdio.h>
+
+/* USER CODE END Includes */
+
+/* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
 #ifdef __GNUC__
@@ -120,6 +127,20 @@ PUTCHAR_PROTOTYPE
 ```c
 /***************** FatFS *****************/
 
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE BEGIN PV */
+
+uint8_t workBuffer[_MAX_SS];
+
+/* USER CODE END PV */
+
+/**
+* @brief  The application entry point.
+* @retval int
+*/
+int main(void)
+{
+
   /* USER CODE BEGIN 1 */
   
   FRESULT res = FR_NOT_READY;                       /* FatFs function common result code */
@@ -133,7 +154,7 @@ PUTCHAR_PROTOTYPE
 
   /* USER CODE BEGIN 2 */
 
- /*##-1- Link the micro SD disk I/O driver ##################################*/
+  /*##-1- Link the micro SD disk I/O driver ##################################*/
   if (FATFS_LinkDriver(&SD_Driver, SDPath) == 0)
   {
     /*##-2- Register the file system object to the FatFs module ##############*/
@@ -238,6 +259,17 @@ PUTCHAR_PROTOTYPE
   FATFS_UnLinkDriver(SDPath);
 
   /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
+}
 ```
 
 ```c
