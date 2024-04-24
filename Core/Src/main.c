@@ -85,7 +85,7 @@ int main(void)
   uint32_t bytesToWritten = 0;                      /* File write counts */
   uint32_t bytesToRead = 0;                         /* File read counts */
   uint8_t filePath[] = "STM32.TXT";                 /* File path buffer */
-  uint8_t writeText[] = "STM32F746G FatFs + uSD";  /* File write buffer */
+  uint8_t writeText[] = "STM32F746G FatFs + uSD";   /* File write buffer */
   uint8_t readText[100];                            /* File read buffer */
 
   /* USER CODE END 1 */

@@ -122,11 +122,12 @@ PUTCHAR_PROTOTYPE
 
   /* USER CODE BEGIN 1 */
   
-  FRESULT res = FR_NOT_READY;                  /* FatFs function common result code */
-  uint32_t bytesToWritten = 0;                 /* File write counts */
-  uint32_t bytesToRead = 0;                    /* File read counts */
-  uint8_t wtext[] = "STM32F746G FatFs + uSD "; /* File write buffer */
-  uint8_t rtext[100];                          /* File read buffer */
+  FRESULT res = FR_NOT_READY;                       /* FatFs function common result code */
+  uint32_t bytesToWritten = 0;                      /* File write counts */
+  uint32_t bytesToRead = 0;                         /* File read counts */
+  uint8_t filePath[] = "STM32.TXT";                 /* File path buffer */
+  uint8_t writeText[] = "STM32F746G FatFs + uSD";   /* File write buffer */
+  uint8_t readText[100];                            /* File read buffer */
 
   /* USER CODE END 1 */
 
