@@ -68,6 +68,8 @@
      - Parity = None  
      - Stop Bits = 1  
 
+   ![usart1remap](doc/usart1_remap.png)  
+   - USART1 Tx pin re-mapping to PA9
 
 7. GPIO
 
@@ -324,9 +326,17 @@ void MX_SDMMC1_SD_Init(void)
 }
 ```
 
+## Demonstration
+
+---
+![demo](doc/demo.png)
+
+---
+
 ---
 
 ## Reference
+
 [STM32CubeF7/Projects/STM32746G-Discovery/Applications/FatFs/FatFs_uSD](https://github.com/STMicroelectronics/STM32CubeF7/tree/master/Projects/STM32746G-Discovery/Applications/FatFs/FatFs_uSD)  
 [How to create a File System on a SD card using STM32CubeIDE](https://community.st.com/t5/stm32-mcus/how-to-create-a-file-system-on-a-sd-card-using-stm32cubeide/ta-p/49830)  
 [RM0385 Reference manual](https://www.st.com/resource/en/reference_manual/rm0385-stm32f75xxx-and-stm32f74xxx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)  
