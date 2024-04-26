@@ -13,9 +13,9 @@ target_compile_definitions(stm32cubemx INTERFACE
 )
 
 target_include_directories(stm32cubemx INTERFACE
-    ../../Core/Inc
     ../../FATFS/Target
     ../../FATFS/App
+    ../../Core/Inc
     ../../Drivers/STM32F7xx_HAL_Driver/Inc
     ../../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy
     ../../Middlewares/Third_Party/FatFs/src
@@ -25,10 +25,6 @@ target_include_directories(stm32cubemx INTERFACE
 
 target_sources(stm32cubemx INTERFACE
     ../../Core/Src/main.c
-    ../../Core/Src/gpio.c
-    ../../Core/Src/dma.c
-    ../../Core/Src/sdmmc.c
-    ../../Core/Src/usart.c
     ../../Core/Src/stm32f7xx_it.c
     ../../Core/Src/stm32f7xx_hal_msp.c
     ../../FATFS/Target/bsp_driver_sd.c
